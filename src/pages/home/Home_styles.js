@@ -109,6 +109,10 @@ export const SecB = styled.div`
   @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
     padding: 2.5em;
   }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+    padding: 1em;
+  }
 `
 
 export const TitleRowSecB = styled.div`
