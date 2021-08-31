@@ -1,6 +1,5 @@
 import React from 'react'
 import { MaxWidth } from '../../styles/globalStyles'
-import { Logo } from '../header/Header_styles'
 import {
   Copyright,
   CopyrightWrapper,
@@ -12,6 +11,7 @@ import {
   Logos,
   MainLink,
   SubLink,
+  Logo
 } from './Footer_styles'
 
 const Footer = () => {
@@ -61,8 +61,6 @@ const Footer = () => {
 
       <FooterMaxWidth>
         <CopyrightWrapper>
-          <div />
-          
           <Copyright>
             <span>Privacy Policy & Terms of service</span>
             <span>Illustrations by www.freepik.com</span>

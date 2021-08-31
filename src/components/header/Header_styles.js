@@ -4,9 +4,22 @@ export const HeaderWrapper = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1em;
   width: 100%;
   height: 10em;
+  padding: 1em;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
+    padding: 1em 2.5em;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    padding: 1em 1.5em;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+    padding: 0.5em 1.5em;
+    height: 7em;
+  }
 `
 
 export const Logo = styled.b`
@@ -15,12 +28,28 @@ export const Logo = styled.b`
   font-family: 'Exo';
 `
 
+export const MenuIcon = styled.img`
+  display: none;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+    display: initial;
+  }
+`
+
 export const HeaderLinks = styled.ul`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   width: 50%;
   list-style: none;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    width: 75%;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+    display: none;
+  }
 `
 
 export const HLink = styled.li`

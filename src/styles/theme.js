@@ -5,12 +5,13 @@ const Theme = {
     lightGray: '#778aa3',
     black: '#2f2f2f',
     white: '#fff',
+    mobileBG: '#f2f7fd',
   },
   maxWidth: '1200px',
-  breakPoins: {
+  brkPoints: {
     large: '1024px',
     medium: '768px',
-    small: '375px',
+    small: '480px',
   },
 }
 

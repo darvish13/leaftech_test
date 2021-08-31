@@ -38,6 +38,21 @@ export const SecA = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   padding: 0 1em;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
+    padding: 0 2.5em;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      max-width: 50vw;
+      text-align: center;
+    }
+  }
 `
 
 export const LeftColSecA = styled.div`
@@ -45,6 +60,12 @@ export const LeftColSecA = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `
 
 export const TitleSecA = styled.b`
@@ -57,6 +78,22 @@ export const ImageSecA = styled.img`
   margin-right: 7em;
   width: 37em;
   margin-bottom: -0.5em;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
+    margin-right: 0;
+    margin-top: 3em;
+    width: 30em;
+    margin-bottom: -0.4em;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    margin-top: 3em;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+    width: 85vw;
+    margin-bottom: -0.3em;
+  }
 `
 
 /**************************************
@@ -64,6 +101,14 @@ export const ImageSecA = styled.img`
  *************************************/
 export const SecB = styled.div`
   padding: 5em 1em;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
+    padding: 5em 2.5em;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    padding: 2.5em;
+  }
 `
 
 export const TitleRowSecB = styled.div`
@@ -92,16 +137,40 @@ export const SubtitleSecB = styled.span`
 export const LogoSecB = styled.img``
 
 export const DualColSecB = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   justify-content: center;
   align-items: flex-start;
-  grid-gap: 10%;
+  margin: 6em auto;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    margin: 3em auto;
+  }
 `
 
 export const ImageSecB = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-right: 7em;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
+    margin-right: 3em;
+  }
+
+  img {
+    @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
+      width: 16em;
+    }
+
+    @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+      margin-left: 3em;
+      margin-bottom: 2em;
+    }
+  }
 `
 
 export const RightColSecB = styled.div`
@@ -110,12 +179,35 @@ export const RightColSecB = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   max-width: 28em;
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    align-items: center;
+    justify-content: center;
+
+    p {
+      text-align: center;
+    }
+  }
 `
 
 export const TitleSecB = styled.b`
+  font-size: 2em;
+  color: ${({ theme }) => theme.colors.black};
+  font-family: 'Exo';
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+    font-size: 1.75em;
+  }
+`
+
+export const Title2SecB = styled.b`
   font-size: 1.35em;
   color: ${({ theme }) => theme.colors.black};
   font-family: 'Exo';
+
+  @media (max-width: ${({ theme }) => theme.brkPoints.medium}) {
+    text-align: center;
+  }
 `
 
 export const FooterRowSecB = styled.div`
@@ -129,6 +221,11 @@ export const FooterRowSecB = styled.div`
     font-size: 1em;
     margin: 0;
     margin-bottom: 0.5em;
+
+    @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+      font-size: 0.9em;
+      text-align: center;
+    }
   }
 
   a {
@@ -137,6 +234,11 @@ export const FooterRowSecB = styled.div`
       color: ${({ theme }) => theme.colors.blue};
       font-size: 1em;
       text-decoration: underline;
+
+      @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+        font-size: 0.9em;
+        text-align: center;
+      }
     }
   }
 `

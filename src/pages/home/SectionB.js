@@ -13,8 +13,9 @@ import {
   SubtitleSecB,
   TitleRowSecB,
   TitleSecA,
-  TitleSecB,
+  Title2SecB,
   VSpace,
+  TitleSecB,
 } from './Home_styles'
 
 const SectionB = () => (
@@ -23,7 +24,7 @@ const SectionB = () => (
       <MaxWidth>
         <SecB>
           <TitleRowSecB>
-            <TitleSecA>Shading automation</TitleSecA>
+            <TitleSecB>Shading automation</TitleSecB>
 
             <SubtitleRowSecB>
               <SubtitleSecB>SERVICE LAUNCHED</SubtitleSecB>
@@ -31,15 +32,13 @@ const SectionB = () => (
             </SubtitleRowSecB>
           </TitleRowSecB>
 
-          <VSpace space='6em' />
-
           <DualColSecB>
             <ImageSecB>
               <img src='images/window.webp' alt='' />
             </ImageSecB>
 
             <RightColSecB>
-              <TitleSecB>Every window is unique</TitleSecB>
+              <Title2SecB>Every window is unique</Title2SecB>
               <P>
                 Light intake differ from one window to another due to
                 surrounding structures, architecture, local weather conditions,
@@ -52,10 +51,9 @@ const SectionB = () => (
 
               <VSpace space='1em' />
 
-              <TitleSecB>
-                Match the real shading conditions
-                <br /> with virtual sensors
-              </TitleSecB>
+              <Title2SecB>
+                Match the real shading conditions with virtual sensors
+              </Title2SecB>
               <P>
                 In order to monitor every window in your building, Leaftech sets
                 up a digital twin of the building and assembles all influence
@@ -64,8 +62,6 @@ const SectionB = () => (
               </P>
             </RightColSecB>
           </DualColSecB>
-
-          <VSpace space='6em' />
 
           <FooterRowSecB>
             <p>Looking to upgrade your sensor solutions?</p>

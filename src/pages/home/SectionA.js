@@ -23,9 +23,9 @@ const SectionA = () => (
 
             <VSpace space='1em' />
 
-            <P>
-              Leaftech’s services are potent on their own,
-              <br /> They deliver even more potential when combined.
+            <P style={{ maxWidth: '24em' }}>
+              Leaftech’s services are potent on their own, They deliver even
+              more potential when combined.
             </P>
 
             <VSpace space='1em' />
