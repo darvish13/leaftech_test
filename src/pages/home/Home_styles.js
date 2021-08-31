@@ -86,8 +86,58 @@ export const SubtitleSecB = styled.span`
   line-height: 1.86;
   letter-spacing: 1.75px;
   font-weight: 600px;
-  margin-right:  1em;
+  margin-right: 1em;
   margin-top: 0.4em;
 `
 
 export const LogoSecB = styled.img``
+
+export const DualColSecB = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: flex-start;
+  grid-gap: 10%;
+`
+
+export const ImageSecB = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
+export const RightColSecB = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 28em;
+`
+
+export const TitleSecB = styled.b`
+  font-size: 1.35em;
+  color: ${({ theme }) => theme.colors.black};
+  font-family: 'Exo';
+`
+
+export const FooterRowSecB = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    color: ${({ theme }) => theme.colors.darkGray};
+    font-size: 1em;
+    margin: 0;
+    margin-bottom: 0.5em;
+  }
+
+  a {
+    p {
+      margin: 0;
+      color: ${({ theme }) => theme.colors.blue};
+      font-size: 1em;
+      text-decoration: underline;
+    }
+  }
+`
