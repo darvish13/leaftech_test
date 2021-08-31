@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const HomeSection = styled.section`
-  position: relative;
   border-bottom: 2px solid ${({ theme }) => theme.colors.black};
 `
 
