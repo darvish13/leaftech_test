@@ -77,7 +77,7 @@ export const TitleSecA = styled.b`
 export const ImageSecA = styled.img`
   margin-right: 7em;
   width: 37em;
-  margin-bottom: -0.5em;
+  margin-bottom: -0.45em;
 
   @media (max-width: ${({ theme }) => theme.brkPoints.large}) {
     margin-right: 0;
