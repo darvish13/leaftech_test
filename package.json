@@ -1,7 +1,8 @@
 {
-  "name": "leaftech_test",
+  "name": "leaftech_test_alireza_lavasani",
   "version": "0.1.0",
   "private": true,
+  "author": "Alireza Lavasani",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
