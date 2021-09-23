@@ -8,12 +8,8 @@ import SectionB from './SectionB'
 const Home = () => {
   return (
     <>
-      <Header />
-
       <SectionA />
       <SectionB />
-
-      <Footer />
     </>
   )
 }

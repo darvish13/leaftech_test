@@ -1,19 +1,34 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { MaxWidth } from '../../styles/globalStyles'
-import { HeaderLinks, HeaderWrapper, HLink, Logo, MenuIcon } from './Header_styles'
+import {
+  HeaderLinks,
+  HeaderWrapper,
+  HLink,
+  Logo,
+  MenuIcon,
+} from './Header_styles'
 
 const Header = () => {
   return (
     <>
       <MaxWidth>
         <HeaderWrapper>
-          <Logo>LEAFTECH</Logo>
+          <Link to='/'>
+            <Logo>LEAFTECH</Logo>
+          </Link>
 
           <HeaderLinks>
-            <HLink>Home</HLink>
-            <HLink active>Services</HLink>
-            <HLink>The Lab</HLink>
-            <HLink>Contact us</HLink>
+            {/* <Link to='/'>
+              <HLink>Home</HLink>
+            </Link> */}
+
+            <Link to='/lab'>
+              <HLink active>The Lab</HLink>
+            </Link>
+
+            {/* <HLink>Services</HLink>
+            <HLink>Contact us</HLink> */}
           </HeaderLinks>
 
           <MenuIcon src='images/menu.svg' />

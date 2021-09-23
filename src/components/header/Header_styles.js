@@ -31,14 +31,15 @@ export const Logo = styled.b`
 export const MenuIcon = styled.img`
   display: none;
 
-  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+  /* @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
     display: initial;
-  }
+  } */
 `
 
 export const HeaderLinks = styled.ul`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  justify-content: flex-end;
   align-items: center;
   width: 50%;
   list-style: none;
@@ -47,9 +48,9 @@ export const HeaderLinks = styled.ul`
     width: 75%;
   }
 
-  @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
+  /* @media (max-width: ${({ theme }) => theme.brkPoints.small}) {
     display: none;
-  }
+  } */
 `
 
 export const HLink = styled.li`
