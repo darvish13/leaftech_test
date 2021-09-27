@@ -1,8 +1,11 @@
 import styled from 'styled-components'
 
+export const Relative = styled.div`
+  position: relative;
+`
+
 export const Main = styled.div`
   min-height: 50vh;
-  position: relative;
 
   .div-root-59 {
     width: 1em;
@@ -74,5 +77,48 @@ export const CameraNames = styled.div`
     padding: 2em 0.85em;
     border-radius: 5px;
     user-select: none;
+  }
+`
+
+export const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 2em;
+`
+
+export const Tab = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3em;
+  font-weight: bold;
+  color: #8f8f8f;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+
+  ${({ active }) =>
+    active &&
+    `
+    color: #3087df; 
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  `}
+`
+
+export const SmallImage = styled.img`
+  width: 5em;
+  border-radius: 5px;
+`
+
+export const LargeImage = styled.img`
+  width: 100%;
+  border-radius: 5px;
+`
+
+export const NameInput = styled.div`
+  padding: 2em 1em;
+
+  .MuiButton-contained {
+    color: white;
+    background-color: #3087df;
   }
 `

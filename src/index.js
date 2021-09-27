@@ -7,15 +7,21 @@ import reportWebVitals from './reportWebVitals'
 import GlobalStyles from './styles/globalStyles'
 import Theme from './styles/theme'
 import { BrowserRouter } from 'react-router-dom'
+import RealmApp from './RealmApp'
+import MongoDB from './MongoDB'
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalStyles />
-    <ThemeProvider theme={Theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+    <RealmApp>
+      <MongoDB>
+        <GlobalStyles />
+        <ThemeProvider theme={Theme}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
+      </MongoDB>
+    </RealmApp>
   </React.StrictMode>,
   document.getElementById('root')
 )
