@@ -177,14 +177,14 @@ const AddSensor = ({
                       <b>Altitude: </b>
                       <span>{Number(coords.altitude).toFixed(5)}</span>
                     </p>
-                    <p>
+                    {/* <p>
                       <b>Heading: </b>
                       <span>{Number(coords.heading).toFixed(5)}</span>
                     </p>
                     <p>
                       <b>Speed: </b>
                       <span>{Number(coords.speed).toFixed(5)}</span>
-                    </p>
+                    </p> */}
                   </>
                 ) : (
                   <div>Getting the location data&hellip; </div>
@@ -225,8 +225,8 @@ const AddSensor = ({
                         lat: coords.latitude,
                         lng: coords.longitude,
                         alt: coords.altitude,
-                        head: coords.heading,
-                        speed: coords.speed,
+                        // head: coords.heading,
+                        // speed: coords.speed,
                       }
                     : {},
                 })
@@ -239,7 +239,7 @@ const AddSensor = ({
   )
 }
 
-const RenderOrientation = ({ alpha, beta, gamma, setOrientation }) => {
+const RenderOrientation = ({ absolute, alpha, beta, gamma, setOrientation }) => {
   useEffect(() => {
     if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
   }, [alpha, beta, gamma, setOrientation])
@@ -248,6 +248,10 @@ const RenderOrientation = ({ alpha, beta, gamma, setOrientation }) => {
     <DebugCard>
       <p>
         <b>Device Orientation: </b>
+      </p>
+      <p>
+        <b>Absolute: </b>
+        <span>{Number(absolute).toFixed(5)}</span>
       </p>
       <p>
         <b>Alpha: </b>

@@ -95,13 +95,13 @@
         </div>
 
         <div style="margin: 0 10px 0 10px; break-inside: avoid">
-          <v-btn class="btn" plain ref="finer" @click="onFiner">
+          <v-btn class="btn" plain ref="finer" @click="onCoarser">
             <v-icon>mdi-minus</v-icon>
           </v-btn>
           <v-btn class="btn" plain ref="boundary" @click="onBoundary">
             Boundary
           </v-btn>
-          <v-btn class="btn" plain ref="coarser" @click="onCoarser">
+          <v-btn class="btn" plain ref="coarser" @click="onFiner">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </div>
