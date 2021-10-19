@@ -387,7 +387,14 @@ const ImageSeg = () => {
         </select>
       </div>
 
+      <div>
+      <button onClick={() => Annotator.finer()}>finer +</button>
+      <button onClick={() => Annotator.coarser()}>coarser -</button>
+      </div>
+
       <div ref={labelsRef}></div>
+
+      
 
       <div ref={container}></div>
     </>

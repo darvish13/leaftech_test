@@ -56,6 +56,7 @@ export const HeaderLinks = styled.ul`
 export const HLink = styled.li`
   font-weight: bold;
   font-size: 0.9em;
+  margin: 0 1em;
   color: ${({
     theme: {
       colors: { blue, darkGray },
