@@ -12,7 +12,7 @@ const labelColors = [
   [0, 255, 0],
 ]
 
-const ImageSeg = () => {
+const ImageSeg = ({ imageUrl }) => {
   /**************************************
    ******** Refs
    *************************************/
@@ -23,7 +23,7 @@ const ImageSeg = () => {
    ******** States
    *************************************/
   const [Annotator, setAnnotator] = useState()
-  const [ImageUrl, setImageUrl] = useState('/images/sky.jpg')
+  // const [ImageUrl, setImageUrl] = useState('/images/sky.jpg')
   const [AnnUrl, setAnnUrl] = useState(null)
   const [BoundaryFlashTimeoutID, setBoundaryFlashTimeoutID] = useState(null)
   const [Progress, setProgress] = useState(true)
@@ -33,7 +33,7 @@ const ImageSeg = () => {
    ******** Effects
    *************************************/
   useEffect(() => {
-    setImageUrl('/images/sky.jpg')
+    // setImageUrl('/images/sky.jpg')
     loadImg()
   }, [])
 
@@ -45,7 +45,7 @@ const ImageSeg = () => {
     params.id = 0
 
     let image = new Image()
-    image.src = ImageUrl
+    image.src = imageUrl
     image.onload = img => {
       initAnno(params)
 
@@ -57,7 +57,7 @@ const ImageSeg = () => {
   const initAnno = params => {
     let data = {
       labels: labels,
-      imageURLs: [ImageUrl, null],
+      imageURLs: [imageUrl, null],
       annotationURLs: [AnnUrl, null],
       colormap: labelColors,
     }
@@ -70,7 +70,7 @@ const ImageSeg = () => {
 
     if (isNaN(id)) throw 'Invalid id'
 
-    const annotator = new SegmentAnnotator(ImageUrl, {
+    const annotator = new SegmentAnnotator(imageUrl, {
       colormap: data.colormap,
       superpixelOptions: { method: 'slic', regionSize: 25 },
       onload: () => {
@@ -81,7 +81,7 @@ const ImageSeg = () => {
       },
     })
 
-    const imageLayer = new Layer(ImageUrl)
+    const imageLayer = new Layer(imageUrl)
 
     setAnnotator(annotator)
     const main = createMainDisplay(params, data, annotator, imageLayer)
@@ -388,15 +388,13 @@ const ImageSeg = () => {
       </div>
 
       <div>
-      <button onClick={() => Annotator.finer()}>finer +</button>
-      <button onClick={() => Annotator.coarser()}>coarser -</button>
+        <button onClick={() => Annotator.finer()}>finer +</button>
+        <button onClick={() => Annotator.coarser()}>coarser -</button>
       </div>
 
       <div ref={labelsRef}></div>
 
-      
-
-      <div ref={container}></div>
+      <div style={{ maxWidth: '100vw' }} ref={container}></div>
     </>
   )
 }

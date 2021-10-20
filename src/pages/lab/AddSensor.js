@@ -16,6 +16,8 @@ import { useRealmApp } from '../../RealmApp'
 import { useMongoDB } from '../../MongoDB'
 import { Button, Grid, TextField } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import CaptureData from '../../components/mediaApis/CaptureData'
+import ImageSeg from '../../modules/imgseg/ImageSeg'
 
 const AddSensor = ({
   isGeolocationAvailable,
@@ -37,37 +39,39 @@ const AddSensor = ({
   /**************************************
    ******** State
    *************************************/
-  const [Image, setImage] = useState()
-  const [DeviceId, setDeviceId] = React.useState()
-  const [Devices, setDevices] = React.useState([])
+  // const [Image, setImage] = useState()
+  // const [DeviceId, setDeviceId] = React.useState()
+  // const [Devices, setDevices] = React.useState([])
   const [Orientation, setOrientation] = useState()
-  const [SensorName, setSensorName] = useState('')
+  const [SensorName, setSensorName] = useState('New Sensor')
   const [SensorHasName, setSensorHasName] = useState(false)
   const [Sending, setSending] = useState(false)
+  const [GoodToGo, setGoodToGo] = useState(false)
+  const [ImageData, setImageData] = useState()
 
   /**************************************
    ******** Handle Devices
    *************************************/
-  const handleDevices = React.useCallback(
-    mediaDevices =>
-      setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput')),
-    [setDevices]
-  )
+  // const handleDevices = React.useCallback(
+  //   mediaDevices =>
+  //     setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput')),
+  //   [setDevices]
+  // )
 
   /**************************************
    ******** Effects
    *************************************/
-  useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then(handleDevices)
-  }, [])
+  // useEffect(() => {
+  //   navigator.mediaDevices.enumerateDevices().then(handleDevices)
+  // }, [])
 
   /**************************************
    ******** Capture Image
    *************************************/
-  const capture = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot()
-    setImage(imageSrc)
-  }, [webcamRef, setImage])
+  // const capture = useCallback(() => {
+  //   const imageSrc = webcamRef.current.getScreenshot()
+  //   setImage(imageSrc)
+  // }, [webcamRef, setImage])
 
   /**************************************
    ******** Send To Api
@@ -91,6 +95,9 @@ const AddSensor = ({
   /**************************************
    ******** Render
    *************************************/
+  if (GoodToGo) return <ImageSeg imageUrl={ImageData} />
+
+  // Capture data
   return (
     <>
       <NameInput>
@@ -118,9 +125,9 @@ const AddSensor = ({
       </NameInput>
 
       <Relative>
-        {SensorHasName && !Image && (
+        {SensorHasName && !GoodToGo && (
           <>
-            <CameraContainer>
+            {/* <CameraContainer>
               <Webcam
                 audio={false}
                 videoConstraints={{
@@ -143,7 +150,13 @@ const AddSensor = ({
               <CaptureButton onClick={capture}>
                 <img src='/images/camera.svg' alt='' />
               </CaptureButton>
-            </CameraContainer>
+            </CameraContainer> */}
+
+            <CaptureData
+              imageData={ImageData}
+              setImageData={setImageData}
+              setGoodToGo={setGoodToGo}
+            />
 
             <DebugWrapper>
               <DeviceOrientation>
@@ -163,7 +176,9 @@ const AddSensor = ({
                 ) : coords ? (
                   <>
                     <p>
-                      <b>Location:</b>
+                      <b>
+                        <big>Location</big>
+                      </b>
                     </p>
                     <p>
                       <b>Latitude: </b>
@@ -194,7 +209,7 @@ const AddSensor = ({
           </>
         )}
 
-        {Image && (
+        {/* {Image && (
           <ReactImageAnnotate
             labelImages
             selectedImage={Image}
@@ -233,13 +248,19 @@ const AddSensor = ({
               }
             }}
           />
-        )}
+        )} */}
       </Relative>
     </>
   )
 }
 
-const RenderOrientation = ({ absolute, alpha, beta, gamma, setOrientation }) => {
+const RenderOrientation = ({
+  absolute,
+  alpha,
+  beta,
+  gamma,
+  setOrientation,
+}) => {
   useEffect(() => {
     if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
   }, [alpha, beta, gamma, setOrientation])
@@ -247,7 +268,9 @@ const RenderOrientation = ({ absolute, alpha, beta, gamma, setOrientation }) => 
   return (
     <DebugCard>
       <p>
-        <b>Device Orientation: </b>
+        <b>
+          <big>Device Orientation</big>
+        </b>
       </p>
       <p>
         <b>Absolute: </b>
