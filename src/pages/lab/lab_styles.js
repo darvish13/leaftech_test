@@ -15,27 +15,6 @@ export const Main = styled.div`
   }
 `
 
-export const DebugWrapper = styled.div`
-  position: absolute;
-  top: 0.5em;
-  left: 0.5em;
-`
-
-export const DebugCard = styled.div`
-  opacity: 0.5;
-  border-radius: 4px;
-  background-color: white;
-  padding: 0.5em;
-  color: black;
-  width: 40vw;
-  margin: 0.5em 0;
-
-  p {
-    font-size: 0.75em;
-    margin: 0.5em 0;
-  }
-`
-
 export const CaptureButton = styled.div`
   background-color: #3087df;
   border-radius: 4px;
@@ -116,6 +95,8 @@ export const LargeImage = styled.img`
 
 export const NameInput = styled.div`
   padding: 2em 1em;
+  margin-bottom: 2em;
+  border-bottom: 1px solid lightgray;
 
   .MuiButton-contained {
     color: white;

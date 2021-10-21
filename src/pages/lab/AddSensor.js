@@ -1,17 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import {
-  CameraContainer,
-  CameraNames,
-  CaptureButton,
-  DebugCard,
-  DebugWrapper,
-  NameInput,
-  Relative,
-} from './lab_styles'
-import ReactImageAnnotate from 'react-image-annotate'
-import Webcam from 'react-webcam'
-import DeviceOrientation from 'react-device-orientation'
-import { geolocated } from 'react-geolocated'
+import React, { useState } from 'react'
+import { NameInput, Relative } from './lab_styles'
 import { useRealmApp } from '../../RealmApp'
 import { useMongoDB } from '../../MongoDB'
 import { Button, Grid, TextField } from '@material-ui/core'
@@ -19,16 +7,7 @@ import { useHistory } from 'react-router-dom'
 import CaptureData from '../../components/mediaApis/CaptureData'
 import ImageSeg from '../../modules/imgseg/ImageSeg'
 
-const AddSensor = ({
-  isGeolocationAvailable,
-  isGeolocationEnabled,
-  coords,
-}) => {
-  /**************************************
-   ******** Refs
-   *************************************/
-  const webcamRef = React.useRef()
-
+const AddSensor = () => {
   /**************************************
    ******** Custom Hooks
    *************************************/
@@ -39,39 +18,11 @@ const AddSensor = ({
   /**************************************
    ******** State
    *************************************/
-  // const [Image, setImage] = useState()
-  // const [DeviceId, setDeviceId] = React.useState()
-  // const [Devices, setDevices] = React.useState([])
-  const [Orientation, setOrientation] = useState()
   const [SensorName, setSensorName] = useState('New Sensor')
   const [SensorHasName, setSensorHasName] = useState(false)
   const [Sending, setSending] = useState(false)
   const [GoodToGo, setGoodToGo] = useState(false)
-  const [ImageData, setImageData] = useState()
-
-  /**************************************
-   ******** Handle Devices
-   *************************************/
-  // const handleDevices = React.useCallback(
-  //   mediaDevices =>
-  //     setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput')),
-  //   [setDevices]
-  // )
-
-  /**************************************
-   ******** Effects
-   *************************************/
-  // useEffect(() => {
-  //   navigator.mediaDevices.enumerateDevices().then(handleDevices)
-  // }, [])
-
-  /**************************************
-   ******** Capture Image
-   *************************************/
-  // const capture = useCallback(() => {
-  //   const imageSrc = webcamRef.current.getScreenshot()
-  //   setImage(imageSrc)
-  // }, [webcamRef, setImage])
+  const [CapturedData, setCapturedData] = useState()
 
   /**************************************
    ******** Send To Api
@@ -95,7 +46,7 @@ const AddSensor = ({
   /**************************************
    ******** Render
    *************************************/
-  if (GoodToGo) return <ImageSeg imageUrl={ImageData} />
+  if (GoodToGo) return <ImageSeg imageUrl={CapturedData.image} />
 
   // Capture data
   return (
@@ -126,114 +77,15 @@ const AddSensor = ({
 
       <Relative>
         {SensorHasName && !GoodToGo && (
-          <>
-            {/* <CameraContainer>
-              <Webcam
-                audio={false}
-                videoConstraints={{
-                  deviceId: DeviceId,
-                  facingMode: 'environment',
-                }}
-                ref={webcamRef}
-                screenshotFormat='image/jpeg'
-                // screenshotQuality={0.65}
-              />
-
-              <CameraNames>
-                {Devices.map(({ deviceId, label }, key) => (
-                  <span onClick={() => setDeviceId(deviceId)}>
-                    {label ? label : `Device ${key + 1}`}
-                  </span>
-                ))}
-              </CameraNames>
-
-              <CaptureButton onClick={capture}>
-                <img src='/images/camera.svg' alt='' />
-              </CaptureButton>
-            </CameraContainer> */}
-
-            <CaptureData
-              imageData={ImageData}
-              setImageData={setImageData}
-              setGoodToGo={setGoodToGo}
-            />
-
-            <DebugWrapper>
-              <DeviceOrientation>
-                {props => (
-                  <RenderOrientation
-                    {...props}
-                    setOrientation={setOrientation}
-                  />
-                )}
-              </DeviceOrientation>
-
-              <DebugCard>
-                {!isGeolocationAvailable ? (
-                  <p>Your browser does not support Geolocation</p>
-                ) : !isGeolocationEnabled ? (
-                  <p>Geolocation is not enabled</p>
-                ) : coords ? (
-                  <>
-                    <p>
-                      <b>
-                        <big>Location</big>
-                      </b>
-                    </p>
-                    <p>
-                      <b>Latitude: </b>
-                      <span>{Number(coords.latitude).toFixed(5)}</span>
-                    </p>
-                    <p>
-                      <b>Longitude: </b>
-                      <span>{Number(coords.longitude).toFixed(5)}</span>
-                    </p>
-                    <p>
-                      <b>Altitude: </b>
-                      <span>{Number(coords.altitude).toFixed(5)}</span>
-                    </p>
-                    {/* <p>
-                      <b>Heading: </b>
-                      <span>{Number(coords.heading).toFixed(5)}</span>
-                    </p>
-                    <p>
-                      <b>Speed: </b>
-                      <span>{Number(coords.speed).toFixed(5)}</span>
-                    </p> */}
-                  </>
-                ) : (
-                  <div>Getting the location data&hellip; </div>
-                )}
-              </DebugCard>
-            </DebugWrapper>
-          </>
+          <CaptureData
+            capturedData={CapturedData}
+            setCapturedData={setCapturedData}
+            setGoodToGo={setGoodToGo}
+          />
         )}
 
-        {/* {Image && (
-          <ReactImageAnnotate
-            labelImages
-            selectedImage={Image}
-            regionClsList={['buildings', 'sky', 'fooliage']}
-            images={[
-              {
-                src: Image,
-                name: SensorName,
-              },
-            ]}
-            enabledTools={['create-polygon']}
-            onExit={state => {
-              console.log(state)
-
-              const { regions } = state.images[0]
-
-              if (regions) {
-                //   const output = regions.map(({ cls, points }) => ({
-                //     tag: cls,
-                //     points,
-                //   }))
-
-                sendToApi({
-                  imageData: state.images[0],
+        {/* sendToApi({
+                  CapturedData: state.images[0],
                   orientation: Orientation,
                   location: coords
                     ? {
@@ -244,52 +96,10 @@ const AddSensor = ({
                         // speed: coords.speed,
                       }
                     : {},
-                })
-              }
-            }}
-          />
-        )} */}
+                }) */}
       </Relative>
     </>
   )
 }
 
-const RenderOrientation = ({
-  absolute,
-  alpha,
-  beta,
-  gamma,
-  setOrientation,
-}) => {
-  useEffect(() => {
-    if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
-  }, [alpha, beta, gamma, setOrientation])
-
-  return (
-    <DebugCard>
-      <p>
-        <b>
-          <big>Device Orientation</big>
-        </b>
-      </p>
-      <p>
-        <b>Absolute: </b>
-        <span>{Number(absolute).toFixed(5)}</span>
-      </p>
-      <p>
-        <b>Alpha: </b>
-        <span>{Number(alpha).toFixed(5)}</span>
-      </p>
-      <p>
-        <b>Beta: </b>
-        <span>{Number(beta).toFixed(5)}</span>
-      </p>
-      <p>
-        <b>Gamma: </b>
-        <span>{Number(gamma).toFixed(5)}</span>
-      </p>
-    </DebugCard>
-  )
-}
-
-export default geolocated()(AddSensor)
+export default AddSensor

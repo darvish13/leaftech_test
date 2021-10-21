@@ -3,8 +3,7 @@ import styled from 'styled-components'
 export const Main = styled.div`
   max-width: 1200px;
   margin: auto;
-  min-height: 50vh;
-  border: 1px solid #94a7c044;
+  position: relative;
 `
 
 export const Title = styled.b`
@@ -66,4 +65,25 @@ export const Button = styled.button`
   background: ${({ color: { background } }) => background};
   color: ${({ color: { text } }) => text};
   text-transform: uppercase;
+`
+
+export const DebugWrapper = styled.div`
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+`
+
+export const DebugCard = styled.div`
+  opacity: 0.5;
+  border-radius: 4px;
+  background-color: white;
+  padding: 0.5em;
+  color: black;
+  width: 40vw;
+  margin: 0.5em 0;
+
+  p {
+    font-size: 0.75em;
+    margin: 0.5em 0;
+  }
 `

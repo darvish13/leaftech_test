@@ -1,7 +1,27 @@
-import { useEffect, useRef, useState } from "react"
-import { Button, CameraBtn, CamerasRow, Canvas, CaptureBtn, Image, Main, Title, Video } from "./captureData_styles"
+import { useEffect, useRef, useState } from 'react'
+import { geolocated } from 'react-geolocated'
+import {
+  Button,
+  CameraBtn,
+  CamerasRow,
+  Canvas,
+  CaptureBtn,
+  DebugCard,
+  DebugWrapper,
+  Image,
+  Main,
+  Video,
+} from './captureData_styles'
+import DeviceOrientation from 'react-device-orientation'
 
-const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
+const CaptureData = ({
+  capturedData,
+  setCapturedData,
+  setGoodToGo,
+  isGeolocationAvailable,
+  isGeolocationEnabled,
+  coords,
+}) => {
   const videoRef = useRef()
   const canvasRef = useRef()
 
@@ -10,6 +30,7 @@ const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
    *************************************/
   const [Cameras, setCameras] = useState([])
   const [SelectedCamera, setSelectedCamera] = useState()
+  const [Orientation, setOrientation] = useState()
 
   /**************************************
    ******** Effects
@@ -23,14 +44,14 @@ const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
    */
   useEffect(() => {
     async function getTheStream() {
-      if (!imageData && SelectedCamera) {
+      if (!capturedData && SelectedCamera) {
         const stream = await getStream(Cameras)
         videoRef.current.srcObject = stream
       }
     }
 
     getTheStream()
-  }, [SelectedCamera, imageData])
+  }, [SelectedCamera, capturedData])
 
   /**************************************
    ******** Main logic
@@ -75,7 +96,7 @@ const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
   return (
     <>
       <Main>
-        {!imageData ? (
+        {!capturedData ? (
           <>
             <Video autoPlay ref={videoRef} />
 
@@ -102,7 +123,11 @@ const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
                   .getContext('2d')
                   .drawImage(videoRef.current, 0, 0)
 
-                setImageData(canvasRef.current.toDataURL('image/jpeg'))
+                setCapturedData({
+                  image: canvasRef.current.toDataURL('image/jpeg'),
+                  orientation: Orientation,
+                  location: coords,
+                })
               }}
             >
               capture
@@ -112,12 +137,12 @@ const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
           </>
         ) : (
           <>
-            <Image src={imageData} alt='' />
+            <Image src={capturedData?.image} alt='' />
 
             <CamerasRow>
               <Button
                 color={{ text: 'black', background: '#dedede' }}
-                onClick={() => setImageData(false)}
+                onClick={() => setCapturedData()}
               >
                 Take Again
               </Button>
@@ -133,10 +158,119 @@ const CaptureData = ({ imageData, setImageData, setGoodToGo }) => {
             </CamerasRow>
           </>
         )}
+
+        <DebugWrapper>
+          <DeviceOrientation>
+            {props => (
+              <RenderOrientation {...props} setOrientation={setOrientation} />
+            )}
+          </DeviceOrientation>
+
+          <DebugCard>
+            {!isGeolocationAvailable ? (
+              <p>Your browser does not support Geolocation</p>
+            ) : !isGeolocationEnabled ? (
+              <p>Geolocation is not enabled</p>
+            ) : coords ? (
+              <>
+                <p>
+                  <b>
+                    <big>Location</big>
+                  </b>
+                </p>
+                <p>
+                  <b>Latitude: </b>
+                  <span>
+                    {Number(
+                      capturedData
+                        ? capturedData.location.latitude
+                        : coords.latitude
+                    ).toFixed(5)}
+                  </span>
+                </p>
+                <p>
+                  <b>Longitude: </b>
+                  <span>
+                    {Number(
+                      capturedData
+                        ? capturedData.location.longitude
+                        : coords.longitude
+                    ).toFixed(5)}
+                  </span>
+                </p>
+                <p>
+                  <b>Altitude: </b>
+                  <span>
+                    {Number(
+                      capturedData
+                        ? capturedData.location.altitude
+                        : coords.altitude
+                    ).toFixed(5)}
+                  </span>
+                </p>
+              </>
+            ) : (
+              <div>Getting the location data&hellip; </div>
+            )}
+          </DebugCard>
+        </DebugWrapper>
       </Main>
     </>
   )
 }
 
+const RenderOrientation = ({
+  absolute,
+  alpha,
+  beta,
+  gamma,
+  setOrientation,
+}) => {
+  useEffect(() => {
+    if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
+  }, [alpha, beta, gamma])
 
-export default CaptureData
+  return (
+    <DebugCard>
+      <p>
+        <b>
+          <big>Device Orientation</big>
+        </b>
+      </p>
+      <p>
+        <b>Absolute: </b>
+        <span>
+          {Number(
+            capturedData ? capturedData.orientation.absolute : absolute
+          ).toFixed(5)}
+        </span>
+      </p>
+      <p>
+        <b>Alpha: </b>
+        <span>
+          {Number(
+            capturedData ? capturedData.orientation.alpha : alpha
+          ).toFixed(5)}
+        </span>
+      </p>
+      <p>
+        <b>Beta: </b>
+        <span>
+          {Number(capturedData ? capturedData.orientation.beta : beta).toFixed(
+            5
+          )}
+        </span>
+      </p>
+      <p>
+        <b>Gamma: </b>
+        <span>
+          {Number(
+            capturedData ? capturedData.orientation.gamma : gamma
+          ).toFixed(5)}
+        </span>
+      </p>
+    </DebugCard>
+  )
+}
+
+export default geolocated()(CaptureData)
