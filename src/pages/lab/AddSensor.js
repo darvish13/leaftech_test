@@ -31,9 +31,12 @@ const AddSensor = () => {
     if (user && db) {
       setSending(true)
 
-      const res = await db.collection('sensors').insertOne(data)
+      const finalData = { sensor: SensorName, ...data }
+
+      const res = await db.collection('sensors').insertOne(finalData)
       console.log(res)
 
+      alert('success')
       history.push('/lab/sensors')
       setSending(false)
     } else {
@@ -46,7 +49,14 @@ const AddSensor = () => {
   /**************************************
    ******** Render
    *************************************/
-  if (GoodToGo) return <ImageSeg capturedData={CapturedData} setCapturedData={setCapturedData} />
+  if (GoodToGo)
+    return (
+      <ImageSeg
+        capturedData={CapturedData}
+        setCapturedData={setCapturedData}
+        sendToApi={sendToApi}
+      />
+    )
 
   // Capture data
   return (
@@ -83,20 +93,6 @@ const AddSensor = () => {
             setGoodToGo={setGoodToGo}
           />
         )}
-
-        {/* sendToApi({
-                  CapturedData: state.images[0],
-                  orientation: Orientation,
-                  location: coords
-                    ? {
-                        lat: coords.latitude,
-                        lng: coords.longitude,
-                        alt: coords.altitude,
-                        // head: coords.heading,
-                        // speed: coords.speed,
-                      }
-                    : {},
-                }) */}
       </Relative>
     </>
   )
