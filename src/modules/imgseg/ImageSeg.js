@@ -4,12 +4,12 @@ import Layer from './image/layer'
 import SegmentAnnotator from './helper/segment-annotator'
 import util from './helper/util'
 import './styles.css'
+import { Button, Container, Grid } from '@material-ui/core'
 
-const labels = ['background', 'sky', 'tree']
-const labelColors = [
-  [0, 0, 0],
-  [0, 0, 255],
-  [0, 255, 0],
+const masks = [
+  { label: 'background', color: [0, 0, 0] },
+  { label: 'sky', color: [0, 0, 255] },
+  { label: 'trees', color: [0, 255, 0] },
 ]
 
 const ImageSeg = ({ capturedData, setCapturedData, sendToApi }) => {
@@ -29,7 +29,9 @@ const ImageSeg = ({ capturedData, setCapturedData, sendToApi }) => {
   const [AnnUrl, setAnnUrl] = useState(null)
   const [BoundaryFlashTimeoutID, setBoundaryFlashTimeoutID] = useState(null)
   const [Progress, setProgress] = useState(true)
-  const [SelectedLabel, setSelectedLabel] = useState(0)
+  const [SelectedLabel, setSelectedLabel] = useState(
+    Annotator?.currentLabel || 0
+  )
 
   /**************************************
    ******** Effects
@@ -58,10 +60,10 @@ const ImageSeg = ({ capturedData, setCapturedData, sendToApi }) => {
 
   const initAnno = params => {
     let data = {
-      labels: labels,
+      labels: masks.map(({ label }) => label),
       imageURLs: [imageUrl, null],
       annotationURLs: [AnnUrl, null],
-      colormap: labelColors,
+      colormap: masks.map(({ color }) => color),
     }
 
     render(data, params)
@@ -107,8 +109,8 @@ const ImageSeg = ({ capturedData, setCapturedData, sendToApi }) => {
     annotatorContainer.appendChild(annotator.container)
     sidebarSpacer.className = 'edit-image-top-menu'
     sidebarContainer.className = 'edit-image-display'
-    sidebarContainer.appendChild(sidebarSpacer)
-    sidebarContainer.appendChild(sidebar)
+    // sidebarContainer.appendChild(sidebarSpacer)
+    // sidebarContainer.appendChild(sidebar)
     container2.className = 'edit-main-container'
     container2.appendChild(annotatorContainer)
     return container2
@@ -387,18 +389,106 @@ const ImageSeg = ({ capturedData, setCapturedData, sendToApi }) => {
         boundary button
       </button>
 
-      <div>
-        <button onClick={() => Annotator.undo()}>undo</button>
-        <button onClick={() => Annotator.redo()}>redo</button>
-        <select>
-          <option value=''></option>
-        </select>
-      </div>
+      <Container style={{ margin: '2em 0' }}>
+        <Grid container spacing={3}>
+          <Grid container item xs={12} spacing={2}>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant='outlined'
+                onClick={() => Annotator.undo()}
+              >
+                undo
+              </Button>
+            </Grid>
 
-      <div>
-        <button onClick={() => Annotator.finer()}>finer +</button>
-        <button onClick={() => Annotator.coarser()}>coarser -</button>
-      </div>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant='outlined'
+                onClick={() => Annotator.redo()}
+              >
+                redo
+              </Button>
+            </Grid>
+          </Grid>
+
+          <Grid container item xs={12} spacing={2}>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant='outlined'
+                onClick={() => Annotator.coarser()}
+              >
+                Less Segments -
+              </Button>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant='outlined'
+                onClick={() => Annotator.finer()}
+              >
+                More Segments +
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid
+          container
+          style={{
+            borderRadius: '5px',
+            border: '1px solid lightgray',
+            margin: '1.5em 0',
+          }}
+        >
+          {masks.map(({ label, color }, index) => (
+            <Grid
+              container
+              item
+              xs={12}
+              style={{
+                padding: '1em',
+                background: SelectedLabel === index && '#e4e9eb',
+              }}
+              onClick={() => {
+                setSelectedLabel(index)
+                Annotator.currentLabel = index
+              }}
+            >
+              <Grid item xs={4}>
+                {label}
+              </Grid>
+              <Grid item xs={8}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    background: `rgb(${color})`,
+                  }}
+                ></div>
+              </Grid>
+            </Grid>
+          ))}
+        </Grid>
+
+        <Button
+          fullWidth
+          variant='contained'
+          style={{ background: '#3087df', color: 'white' }}
+          onClick={() => {
+            const png = Annotator.export()
+            const output = { ...capturedData, png }
+
+            setCapturedData(output)
+            sendToApi(output)
+          }}
+        >
+          Export Data
+        </Button>
+      </Container>
 
       <div ref={labelsRef}></div>
 
