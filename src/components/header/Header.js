@@ -24,12 +24,12 @@ const Header = () => {
             </Link> */}
 
             <Link to='/lab'>
-              <HLink>Lab</HLink>
+              <HLink active>Lab</HLink>
             </Link>
 
-            <Link to='/sandbox'>
+            {/* <Link to='/sandbox'>
               <HLink active>Sandbox</HLink>
-            </Link>
+            </Link> */}
 
             {/* <HLink>Services</HLink>
             <HLink>Contact us</HLink> */}

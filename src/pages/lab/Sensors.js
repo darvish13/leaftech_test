@@ -37,15 +37,16 @@ const Sensors = () => {
 
         const tableData = rawData.map((data, index) => {
           const {
-            imageData: { name, src },
+            sensor,
+            image,
             location: { lat, lng, alt, head, speed },
             orientation: { alpha, beta, gamma },
           } = data
 
           return {
             index,
-            name,
-            imageUrl: src,
+            sensor,
+            image,
             alpha,
             beta,
             gamma,
@@ -75,30 +76,30 @@ const Sensors = () => {
         icons={tableIcons}
         columns={[
           { title: '#', field: 'index' },
-          { title: 'Sensor Name', field: 'name' },
+          { title: 'Sensor Name', field: 'sensor' },
           {
             title: 'Image',
-            field: 'imageUrl',
-            render: ({ imageUrl }) => <SmallImage src={imageUrl} alt='' />,
+            field: 'image',
+            render: ({ image }) => <SmallImage src={image} alt='' />,
           },
         ]}
         data={TableData}
         title='Sensors List'
-        detailPanel={({
-          rawData: {
-            imageData: { src, name },
-            location,
-            orientation,
-          },
-        }) => {
-          const { lat, lng, alt, speed, head } = location
+        detailPanel={({ rawData: { image, location, orientation } }) => {
+          const {
+            latitude: lat,
+            longitude: lng,
+            altitude: alt,
+            speed,
+            heading,
+          } = location
           const { alpha, beta, gamma } = orientation
 
           return (
             <>
               <Grid container spacing={5} style={{ padding: '1em' }}>
                 <Grid item xs={12} sm={12} md={5}>
-                  <LargeImage src={src} />
+                  <LargeImage src={image} />
                 </Grid>
 
                 <Grid item xs={12} sm={12} md={7}>
@@ -120,7 +121,7 @@ const Sensors = () => {
                         <b>Speed:</b> {speed}
                       </p>
                       <p>
-                        <b>Head:</b> {head}
+                        <b>Head:</b> {heading}
                       </p>
                     </div>
                   )}
