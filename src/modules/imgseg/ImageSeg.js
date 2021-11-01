@@ -12,7 +12,9 @@ const labelColors = [
   [0, 255, 0],
 ]
 
-const ImageSeg = ({ imageUrl }) => {
+const ImageSeg = ({ capturedData, setCapturedData }) => {
+  const { image: imageUrl } = capturedData
+
   /**************************************
    ******** Refs
    *************************************/
@@ -141,7 +143,9 @@ const ImageSeg = ({ imageUrl }) => {
       //   ? data.annotationURLs[params.id].split(/[\\/]/).pop()
       //   : params.id + '.png'
       var filename = params.id + '.png'
-      downloadURI(annotator.export(), filename)
+      // downloadURI(annotator.export(), filename)
+
+      setCapturedData({ ...capturedData, png: annotator.export() })
     })
     spacer1.className = 'edit-sidebar-spacer'
     undoButton.className = 'edit-sidebar-button'

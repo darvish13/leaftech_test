@@ -11,7 +11,7 @@ const MongoDB = ({ children }) => {
   useEffect(() => {
     if (user !== null) {
       const realmService = user.mongoClient('mongodb-atlas')
-      setDb(realmService.db('leaftech_db'))
+      setDb(realmService.db('sensors_db'))
     }
   }, [user])
 

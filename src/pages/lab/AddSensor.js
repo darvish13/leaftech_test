@@ -46,7 +46,7 @@ const AddSensor = () => {
   /**************************************
    ******** Render
    *************************************/
-  if (GoodToGo) return <ImageSeg imageUrl={CapturedData.image} />
+  if (GoodToGo) return <ImageSeg capturedData={CapturedData} setCapturedData={setCapturedData} />
 
   // Capture data
   return (

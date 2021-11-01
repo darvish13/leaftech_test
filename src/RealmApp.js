@@ -6,12 +6,12 @@ import { useEffect } from 'react'
 const RealmAppContext = React.createContext(null)
 
 const RealmApp = ({ children }) => {
-  const REALM_APP_ID = 'leaftech_imageo-eafty'
+  const REALM_APP_ID = 'leaftech-sensors-manager-cjzal'
   const app = new RealmWeb.App({ id: REALM_APP_ID })
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    logIn('alireza.sh.lavasani@gmail.com', 'Lkjawd1313')
+    logIn('developer@leaftech.eu', 'DevTeamPassword')
   }, [])
 
   const logIn = async (email, password) => {

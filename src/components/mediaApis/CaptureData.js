@@ -39,9 +39,9 @@ const CaptureData = ({
     hasUserMedia()
   }, [])
 
-  /**
-   * handle camera change
-   */
+  /**************************************
+   ******** Handle camera change
+   *************************************/
   useEffect(() => {
     async function getTheStream() {
       if (!capturedData && SelectedCamera) {
@@ -61,7 +61,6 @@ const CaptureData = ({
       // Get available device cameras
       const cameras = await getCameraList()
 
-      console.log(cameras)
       setCameras(cameras)
 
       // Attach the camera stream to the video tag
@@ -91,6 +90,98 @@ const CaptureData = ({
     })
 
   /**************************************
+   ******** Render location
+   *************************************/
+  const RenderLocation = () => (
+    <DebugCard>
+      {!isGeolocationAvailable ? (
+        <p>Your browser does not support Geolocation</p>
+      ) : !isGeolocationEnabled ? (
+        <p>Geolocation is not enabled</p>
+      ) : coords ? (
+        <>
+          <p>
+            <b>
+              <big>Location</big>
+            </b>
+          </p>
+          <p>
+            <b>Latitude: </b>
+            <span>
+              {Number(
+                capturedData ? capturedData.location.latitude : coords.latitude
+              ).toFixed(5)}
+            </span>
+          </p>
+          <p>
+            <b>Longitude: </b>
+            <span>
+              {Number(
+                capturedData
+                  ? capturedData.location.longitude
+                  : coords.longitude
+              ).toFixed(5)}
+            </span>
+          </p>
+          <p>
+            <b>Altitude: </b>
+            <span>
+              {Number(
+                capturedData ? capturedData.location.altitude : coords.altitude
+              ).toFixed(5)}
+            </span>
+          </p>
+        </>
+      ) : (
+        <div>Getting the location data&hellip; </div>
+      )}
+    </DebugCard>
+  )
+
+  /**************************************
+   ******** Render orientation
+   *************************************/
+  const RenderOrientation = ({ alpha, beta, gamma }) => {
+    useEffect(() => {
+      if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
+    }, [alpha, beta, gamma])
+
+    return (
+      <DebugCard>
+        <p>
+          <b>
+            <big>Device Orientation</big>
+          </b>
+        </p>
+        <p>
+          <b>Alpha: </b>
+          <span>
+            {Number(
+              capturedData?.orientation ? capturedData.orientation.alpha : alpha
+            ).toFixed(5)}
+          </span>
+        </p>
+        <p>
+          <b>Beta: </b>
+          <span>
+            {Number(
+              capturedData?.orientation ? capturedData.orientation.beta : beta
+            ).toFixed(5)}
+          </span>
+        </p>
+        <p>
+          <b>Gamma: </b>
+          <span>
+            {Number(
+              capturedData?.orientation ? capturedData.orientation.gamma : gamma
+            ).toFixed(5)}
+          </span>
+        </p>
+      </DebugCard>
+    )
+  }
+
+  /**************************************
    ******** Render
    *************************************/
   return (
@@ -103,6 +194,7 @@ const CaptureData = ({
             <CamerasRow>
               {Cameras.map(({ deviceId, label }, index) => (
                 <CameraBtn
+                  key={deviceId}
                   onClick={() => setSelectedCamera(deviceId)}
                   active={
                     SelectedCamera
@@ -161,115 +253,12 @@ const CaptureData = ({
 
         <DebugWrapper>
           <DeviceOrientation>
-            {props => (
-              <RenderOrientation {...props} setOrientation={setOrientation} />
-            )}
+            {props => <RenderOrientation {...props} />}
           </DeviceOrientation>
-
-          <DebugCard>
-            {!isGeolocationAvailable ? (
-              <p>Your browser does not support Geolocation</p>
-            ) : !isGeolocationEnabled ? (
-              <p>Geolocation is not enabled</p>
-            ) : coords ? (
-              <>
-                <p>
-                  <b>
-                    <big>Location</big>
-                  </b>
-                </p>
-                <p>
-                  <b>Latitude: </b>
-                  <span>
-                    {Number(
-                      capturedData
-                        ? capturedData.location.latitude
-                        : coords.latitude
-                    ).toFixed(5)}
-                  </span>
-                </p>
-                <p>
-                  <b>Longitude: </b>
-                  <span>
-                    {Number(
-                      capturedData
-                        ? capturedData.location.longitude
-                        : coords.longitude
-                    ).toFixed(5)}
-                  </span>
-                </p>
-                <p>
-                  <b>Altitude: </b>
-                  <span>
-                    {Number(
-                      capturedData
-                        ? capturedData.location.altitude
-                        : coords.altitude
-                    ).toFixed(5)}
-                  </span>
-                </p>
-              </>
-            ) : (
-              <div>Getting the location data&hellip; </div>
-            )}
-          </DebugCard>
+          <RenderLocation />
         </DebugWrapper>
       </Main>
     </>
-  )
-}
-
-const RenderOrientation = ({
-  absolute,
-  alpha,
-  beta,
-  gamma,
-  setOrientation,
-}) => {
-  useEffect(() => {
-    if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
-  }, [alpha, beta, gamma])
-
-  return (
-    <DebugCard>
-      <p>
-        <b>
-          <big>Device Orientation</big>
-        </b>
-      </p>
-      <p>
-        <b>Absolute: </b>
-        <span>
-          {Number(
-            capturedData ? capturedData.orientation.absolute : absolute
-          ).toFixed(5)}
-        </span>
-      </p>
-      <p>
-        <b>Alpha: </b>
-        <span>
-          {Number(
-            capturedData ? capturedData.orientation.alpha : alpha
-          ).toFixed(5)}
-        </span>
-      </p>
-      <p>
-        <b>Beta: </b>
-        <span>
-          {Number(capturedData ? capturedData.orientation.beta : beta).toFixed(
-            5
-          )}
-        </span>
-      </p>
-      <p>
-        <b>Gamma: </b>
-        <span>
-          {Number(
-            capturedData ? capturedData.orientation.gamma : gamma
-          ).toFixed(5)}
-        </span>
-      </p>
-    </DebugCard>
   )
 }
 
