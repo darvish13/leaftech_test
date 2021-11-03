@@ -40,16 +40,13 @@ const Sensors = () => {
             sensor,
             image,
             location: { lat, lng, alt, head, speed },
-            orientation: { alpha, beta, gamma },
+            orientation,
           } = data
 
-          return {
+          let exportObj = {
             index,
             sensor,
             image,
-            alpha,
-            beta,
-            gamma,
             lat,
             lng,
             alt,
@@ -57,6 +54,18 @@ const Sensors = () => {
             speed,
             rawData: data,
           }
+
+          if (orientation) {
+            const { alpha, beta, gamma } = orientation
+            exportObj = {
+              ...exportObj,
+              alpha,
+              beta,
+              gamma,
+            }
+          }
+
+          return exportObj
         })
 
         setTableData(tableData)
@@ -93,7 +102,6 @@ const Sensors = () => {
             speed,
             heading,
           } = location
-          const { alpha, beta, gamma } = orientation
 
           return (
             <>
@@ -126,19 +134,19 @@ const Sensors = () => {
                     </div>
                   )}
 
-                  {Object.keys(orientation).length > 0 && (
+                  {orientation && (
                     <div>
                       <p>
                         <h3>Orientation:</h3>
                       </p>
                       <p>
-                        <b>Alpha:</b> {alpha}
+                        <b>Alpha:</b> {orientation?.alpha}
                       </p>
                       <p>
-                        <b>Beta:</b> {beta}
+                        <b>Beta:</b> {orientation?.beta}
                       </p>
                       <p>
-                        <b>Gamma:</b> {gamma}
+                        <b>Gamma:</b> {orientation?.gamma}
                       </p>
                     </div>
                   )}

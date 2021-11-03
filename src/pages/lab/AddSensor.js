@@ -6,6 +6,7 @@ import { Button, Grid, TextField } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import CaptureData from '../../components/mediaApis/CaptureData'
 import ImageSeg from '../../modules/imgseg/ImageSeg'
+import DeviceOrientation from 'react-device-orientation'
 
 const AddSensor = () => {
   /**************************************
@@ -87,11 +88,16 @@ const AddSensor = () => {
 
       <Relative>
         {SensorHasName && !GoodToGo && (
-          <CaptureData
-            capturedData={CapturedData}
-            setCapturedData={setCapturedData}
-            setGoodToGo={setGoodToGo}
-          />
+          <DeviceOrientation>
+            {props => (
+              <CaptureData
+                capturedData={CapturedData}
+                setCapturedData={setCapturedData}
+                setGoodToGo={setGoodToGo}
+                {...props}
+              />
+            )}
+          </DeviceOrientation>
         )}
       </Relative>
     </>

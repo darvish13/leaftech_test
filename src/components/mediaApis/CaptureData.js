@@ -12,7 +12,7 @@ import {
   Main,
   Video,
 } from './captureData_styles'
-import DeviceOrientation from 'react-device-orientation'
+import { CaptureButton } from '../../pages/lab/lab_styles'
 
 const CaptureData = ({
   capturedData,
@@ -21,6 +21,9 @@ const CaptureData = ({
   isGeolocationAvailable,
   isGeolocationEnabled,
   coords,
+  alpha,
+  beta,
+  gamma,
 }) => {
   const videoRef = useRef()
   const canvasRef = useRef()
@@ -30,7 +33,7 @@ const CaptureData = ({
    *************************************/
   const [Cameras, setCameras] = useState([])
   const [SelectedCamera, setSelectedCamera] = useState()
-  const [Orientation, setOrientation] = useState()
+  const [Alpha, setAlpha] = useState()
 
   /**************************************
    ******** Effects
@@ -141,11 +144,7 @@ const CaptureData = ({
   /**************************************
    ******** Render orientation
    *************************************/
-  const RenderOrientation = ({ alpha, beta, gamma }) => {
-    useEffect(() => {
-      if (alpha && beta && gamma) setOrientation({ alpha, beta, gamma })
-    }, [alpha, beta, gamma])
-
+  const RenderOrientation = () => {
     return (
       <DebugCard>
         <p>
@@ -156,9 +155,7 @@ const CaptureData = ({
         <p>
           <b>Alpha: </b>
           <span>
-            {Number(
-              capturedData?.orientation ? capturedData.orientation.alpha : alpha
-            ).toFixed(5)}
+            {Number(Alpha || alpha).toFixed(5)}
           </span>
         </p>
         <p>
@@ -207,23 +204,31 @@ const CaptureData = ({
               ))}
             </CamerasRow>
 
-            <CaptureBtn
-              onClick={() => {
-                canvasRef.current.width = videoRef.current.videoWidth
-                canvasRef.current.height = videoRef.current.videoHeight
-                canvasRef.current
-                  .getContext('2d')
-                  .drawImage(videoRef.current, 0, 0)
+            {!Alpha ? (
+              <CaptureBtn onClick={() => setAlpha(alpha)}>Set Alpha</CaptureBtn>
+            ) : (
+              <CaptureBtn
+                onClick={() => {
+                  canvasRef.current.width = videoRef.current.videoWidth
+                  canvasRef.current.height = videoRef.current.videoHeight
+                  canvasRef.current
+                    .getContext('2d')
+                    .drawImage(videoRef.current, 0, 0)
 
-                setCapturedData({
-                  image: canvasRef.current.toDataURL('image/jpeg'),
-                  orientation: Orientation,
-                  location: coords,
-                })
-              }}
-            >
-              capture
-            </CaptureBtn>
+                  setCapturedData({
+                    image: canvasRef.current.toDataURL('image/jpeg'),
+                    orientation: {
+                      alpha: Number(Alpha).toFixed(5),
+                      beta: Number(beta).toFixed(5),
+                      gamma: Number(gamma).toFixed(5),
+                    },
+                    location: coords,
+                  })
+                }}
+              >
+                capture
+              </CaptureBtn>
+            )}
 
             <Canvas ref={canvasRef} />
           </>
@@ -252,9 +257,7 @@ const CaptureData = ({
         )}
 
         <DebugWrapper>
-          <DeviceOrientation>
-            {props => <RenderOrientation {...props} />}
-          </DeviceOrientation>
+          <RenderOrientation />
           <RenderLocation />
         </DebugWrapper>
       </Main>
