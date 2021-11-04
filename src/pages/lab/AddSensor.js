@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { NameInput, Relative } from './lab_styles'
+import React, { useEffect, useState } from 'react'
+import { NameInput, Relative, P } from './lab_styles'
 import { useRealmApp } from '../../RealmApp'
 import { useMongoDB } from '../../MongoDB'
 import { Button, Grid, TextField } from '@material-ui/core'
@@ -7,6 +7,9 @@ import { useHistory } from 'react-router-dom'
 import CaptureData from '../../components/mediaApis/CaptureData'
 import ImageSeg from '../../modules/imgseg/ImageSeg'
 import DeviceOrientation from 'react-device-orientation'
+import { nanoid } from 'nanoid'
+import { tableIcons } from '../../modules/material-table/tableSetup'
+import MaterialTable from 'material-table'
 
 const AddSensor = () => {
   /**************************************
@@ -24,6 +27,42 @@ const AddSensor = () => {
   const [Sending, setSending] = useState(false)
   const [GoodToGo, setGoodToGo] = useState(false)
   const [CapturedData, setCapturedData] = useState()
+  const [GroupName, setGroupName] = useState()
+  const [SelectedGroup, setSelectedGroup] = useState()
+  const [Loading, setLoading] = useState(false)
+  const [Sensors, setSensors] = useState()
+  const [TableData, setTableData] = useState([])
+
+  /**************************************
+   ******** Get sensors
+   *************************************/
+  useEffect(() => {
+    if (!Sensors) getSensors()
+  }, [user, db])
+
+  /**************************************
+   ******** Get sensors
+   *************************************/
+  const getSensors = async () => {
+    setLoading(true)
+
+    if (user && db) {
+      const sensorsCollection = await db.collection('sensors')
+
+      const rawData = await sensorsCollection.aggregate([
+        { $sort: { _id: -1 } },
+      ])
+
+      const tableData = rawData.map(({ group }, index) => ({
+        index,
+        group,
+      }))
+
+      setSensors(rawData)
+      setTableData(tableData)
+      setLoading(false)
+    }
+  }
 
   /**************************************
    ******** Send To Api
@@ -32,7 +71,24 @@ const AddSensor = () => {
     if (user && db) {
       setSending(true)
 
-      const finalData = { sensor: SensorName, ...data }
+      const existingGroup = Sensors.find(({ id }) => id === SelectedGroup.id)
+
+      let finalData = {}
+
+      if (existingGroup)
+        finalData = {
+          ...existingGroup,
+          sensors: [
+            ...existingGroup.sensors,
+            { id: nanoid(), sensor: SensorName, ...data },
+          ],
+        }
+      // Mongodb update query
+      else
+        finalData = {
+          group: GroupName,
+          sensors: [{ id: nanoid(), sensor: SensorName, ...data }],
+        }
 
       const res = await db.collection('sensors').insertOne(finalData)
       console.log(res)
@@ -45,17 +101,31 @@ const AddSensor = () => {
     }
   }
 
-  if (Sending) return <p>Sending data to API ...</p>
-
   /**************************************
    ******** Render
    *************************************/
+  // Loading
+  if (Sending) return <p>Sending data to API ...</p>
+
+  // Load image segmentor
   if (GoodToGo)
     return (
       <ImageSeg
         capturedData={CapturedData}
         setCapturedData={setCapturedData}
         sendToApi={sendToApi}
+      />
+    )
+
+  // Select Group
+  if (!SelectedGroup)
+    return (
+      <SelectGroup
+        groupName={GroupName}
+        setGroupName={setGroupName}
+        setSelectedGroup={setSelectedGroup}
+        loading={Loading}
+        tableData={TableData}
       />
     )
 
@@ -105,3 +175,60 @@ const AddSensor = () => {
 }
 
 export default AddSensor
+
+/**************************************
+ ******** Create or Select group
+ *************************************/
+const SelectGroup = ({
+  groupName,
+  setGroupName,
+  setSelectedGroup,
+  loading,
+  tableData,
+}) => {
+  return (
+    <>
+      <P>
+        Create a new group to add sensors to or select one from the table below.
+      </P>
+
+      <NameInput>
+        <Grid container spacing={5} alignItems='center'>
+          <Grid item xs={12} sm={12} md={8}>
+            <TextField
+              label='Group Name'
+              variant='standard'
+              value={groupName}
+              onChange={({ target: { value } }) => setGroupName(value)}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
+            <Button
+              variant='contained'
+              fullWidth
+              onClick={() =>
+                setSelectedGroup({ id: nanoid(), name: groupName })
+              }
+            >
+              Create New Group
+            </Button>
+          </Grid>
+        </Grid>
+      </NameInput>
+
+      <MaterialTable
+        style={{ margin: '2em auto' }}
+        isLoading={loading}
+        icons={tableIcons}
+        columns={[
+          { title: '#', field: 'index' },
+          { title: 'Group Name', field: 'group' },
+        ]}
+        data={tableData}
+        title='Groups List'
+      />
+    </>
+  )
+}

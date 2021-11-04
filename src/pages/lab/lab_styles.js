@@ -103,3 +103,22 @@ export const NameInput = styled.div`
     background-color: #3087df;
   }
 `
+export const P = styled.p`
+  font-size: 1.1em;
+  font-weight: 500;
+  color: gray;
+  margin-bottom: 2em;
+  padding: 0 1em;
+`
+
+export const TableWrapper = styled.div`
+  .MuiTypography-h6 {
+    font-size: 1.25em;
+    color: #3087df;
+  }
+
+  .MuiToolbar-root {
+    display: grid;
+    grid-gap: 1em;
+  }
+`
