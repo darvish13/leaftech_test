@@ -15,6 +15,7 @@
     "react-device-orientation": "^0.1.0",
     "react-dom": "^17.0.2",
     "react-geolocated": "^3.2.0",
+    "react-hot-toast": "^2.1.1",
     "react-image-annotate": "^1.8.0",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",

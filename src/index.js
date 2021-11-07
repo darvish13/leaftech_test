@@ -9,6 +9,7 @@ import Theme from './styles/theme'
 import { BrowserRouter } from 'react-router-dom'
 import RealmApp from './RealmApp'
 import MongoDB from './MongoDB'
+import { Toaster } from 'react-hot-toast'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.render(
         <ThemeProvider theme={Theme}>
           <BrowserRouter>
             <App />
+            <Toaster />
           </BrowserRouter>
         </ThemeProvider>
       </MongoDB>

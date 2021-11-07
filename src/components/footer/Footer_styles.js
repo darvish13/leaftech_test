@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const FooterSection = styled.footer`
   box-shadow: 0 1px 2px 0 #778aa3;
   padding: 2em 1em;
+  margin-top: 2em;
 `
 
 export const FooterMaxWidth = styled.main`

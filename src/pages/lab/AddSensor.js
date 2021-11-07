@@ -8,7 +8,8 @@ import CaptureData from '../../components/mediaApis/CaptureData'
 import ImageSeg from '../../modules/imgseg/ImageSeg'
 import DeviceOrientation from 'react-device-orientation'
 import { nanoid } from 'nanoid'
-import { SelectSensorsGroup } from './SensorComponents'
+import { SelectSensorsGroup } from './Components'
+import toast from 'react-hot-toast'
 
 const AddSensor = () => {
   /**************************************
@@ -52,8 +53,9 @@ const AddSensor = () => {
         { $sort: { _id: -1 } },
       ])
 
-      const tableData = rawData.map(({ group }, index) => ({
+      const tableData = rawData.map(({ _id, group }, index) => ({
         index,
+        id: _id,
         group,
       }))
 
@@ -70,33 +72,61 @@ const AddSensor = () => {
     if (user && db) {
       setSending(true)
 
-      const existingGroup = Sensors.find(({ id }) => id === SelectedGroup.id)
-
-      let finalData = {}
-
-      if (existingGroup)
-        finalData = {
-          ...existingGroup,
-          sensors: [
-            ...existingGroup.sensors,
-            { id: nanoid(), sensor: SensorName, ...data },
-          ],
+      const res = await db.collection('sensors').updateOne(
+        { _id: SelectedGroup },
+        {
+          $push: {
+            sensors: { id: nanoid(), sensor: SensorName, ...data },
+          },
         }
-      // Mongodb update query
-      else
-        finalData = {
-          group: GroupName,
-          sensors: [{ id: nanoid(), sensor: SensorName, ...data }],
-        }
-
-      const res = await db.collection('sensors').insertOne(finalData)
+      )
       console.log(res)
 
-      alert('success')
+      // let updatedData = Sensors.find(({ id }) => id === SelectedGroup)
+
+      // let updatedSensors
+
+      // if (updatedData.sensors.length)
+      //   updatedSensors = [
+      //     ...updatedData.sensors,
+      //     { id: nanoid(), sensor: SensorName, ...data },
+      //   ]
+      // else updatedSensors = [{ id: nanoid(), sensor: SensorName, ...data }]
+
+      // updatedData.sensors = updatedSensors
+
+      // const res = await db
+      //   .collection('sensors')
+      //   .updateOne({ _id: SelectedGroup }, updatedData)
+      // console.log(res)
+
+      // const existingGroup = Sensors.find(({ id }) => id === SelectedGroup.id)
+
+      // let finalData = {}
+
+      // if (existingGroup)
+      //   finalData = {
+      //     ...existingGroup,
+      //     sensors: [
+      //       ...existingGroup.sensors,
+      //       { id: nanoid(), sensor: SensorName, ...data },
+      //     ],
+      //   }
+      // // Mongodb update query
+      // else
+      //   finalData = {
+      //     group: GroupName,
+      //     sensors: [{ id: nanoid(), sensor: SensorName, ...data }],
+      //   }
+
+      // const res = await db.collection('sensors').insertOne(finalData)
+      // console.log(res)
+
+      toast.success('Sensor data successfully added')
       history.push('/lab/sensors')
       setSending(false)
     } else {
-      alert('not connected to db')
+      toast.error('Database Error!!!')
     }
   }
 
@@ -125,6 +155,8 @@ const AddSensor = () => {
         setSelectedGroup={setSelectedGroup}
         loading={Loading}
         tableData={TableData}
+        db={db}
+        user={user}
       />
     )
 
@@ -174,4 +206,3 @@ const AddSensor = () => {
 }
 
 export default AddSensor
-
