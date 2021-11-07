@@ -70,93 +70,95 @@ const Sensors = () => {
           data={TableData}
           title='Groups List'
           detailPanel={({ group, rawData: { sensors } }) => {
-            const innerTableData = sensors.map((sensorData, index) => ({
-              index,
-              sensor: sensorData.sensor,
-              image: sensorData.image,
-              sensorData,
-            }))
+            if (sensors) {
+              const innerTableData = sensors.map((sensorData, index) => ({
+                index,
+                sensor: sensorData.sensor,
+                image: sensorData.image,
+                sensorData,
+              }))
 
-            return (
-              <MaterialTable
-                style={{ margin: '2em auto' }}
-                icons={tableIcons}
-                columns={[
-                  { title: '#', field: 'index' },
-                  { title: 'Sensor Name', field: 'sensor' },
-                  {
-                    title: 'Image',
-                    field: 'image',
-                    render: ({ image }) => <SmallImage src={image} alt='' />,
-                  },
-                ]}
-                data={innerTableData}
-                title={`${group} Sensors List`}
-                detailPanel={({
-                  sensorData: { image, location, orientation },
-                }) => {
-                  const {
-                    latitude: lat,
-                    longitude: lng,
-                    altitude: alt,
-                    speed,
-                    heading,
-                  } = location
+              return (
+                <MaterialTable
+                  style={{ margin: '2em auto' }}
+                  icons={tableIcons}
+                  columns={[
+                    { title: '#', field: 'index' },
+                    { title: 'Sensor Name', field: 'sensor' },
+                    {
+                      title: 'Image',
+                      field: 'image',
+                      render: ({ image }) => <SmallImage src={image} alt='' />,
+                    },
+                  ]}
+                  data={innerTableData}
+                  title={`${group} Sensors List`}
+                  detailPanel={({
+                    sensorData: { image, location, orientation },
+                  }) => {
+                    const {
+                      latitude: lat,
+                      longitude: lng,
+                      altitude: alt,
+                      speed,
+                      heading,
+                    } = location
 
-                  return (
-                    <>
-                      <Grid container spacing={5} style={{ padding: '1em' }}>
-                        <Grid item xs={12} sm={12} md={5}>
-                          <LargeImage src={image} />
+                    return (
+                      <>
+                        <Grid container spacing={5} style={{ padding: '1em' }}>
+                          <Grid item xs={12} sm={12} md={5}>
+                            <LargeImage src={image} />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={7}>
+                            {Object.keys(location).length > 0 && (
+                              <div style={{ marginBottom: '3em' }}>
+                                <p>
+                                  <h3>Location:</h3>
+                                </p>
+                                <p>
+                                  <b>Lat:</b> {lat}
+                                </p>
+                                <p>
+                                  <b>Lng:</b> {lng}
+                                </p>
+                                <p>
+                                  <b>Alt:</b> {alt}
+                                </p>
+                                <p>
+                                  <b>Speed:</b> {speed}
+                                </p>
+                                <p>
+                                  <b>Head:</b> {heading}
+                                </p>
+                              </div>
+                            )}
+
+                            {orientation && (
+                              <div>
+                                <p>
+                                  <h3>Orientation:</h3>
+                                </p>
+                                <p>
+                                  <b>Alpha:</b> {orientation?.alpha}
+                                </p>
+                                <p>
+                                  <b>Beta:</b> {orientation?.beta}
+                                </p>
+                                <p>
+                                  <b>Gamma:</b> {orientation?.gamma}
+                                </p>
+                              </div>
+                            )}
+                          </Grid>
                         </Grid>
-
-                        <Grid item xs={12} sm={12} md={7}>
-                          {Object.keys(location).length > 0 && (
-                            <div style={{ marginBottom: '3em' }}>
-                              <p>
-                                <h3>Location:</h3>
-                              </p>
-                              <p>
-                                <b>Lat:</b> {lat}
-                              </p>
-                              <p>
-                                <b>Lng:</b> {lng}
-                              </p>
-                              <p>
-                                <b>Alt:</b> {alt}
-                              </p>
-                              <p>
-                                <b>Speed:</b> {speed}
-                              </p>
-                              <p>
-                                <b>Head:</b> {heading}
-                              </p>
-                            </div>
-                          )}
-
-                          {orientation && (
-                            <div>
-                              <p>
-                                <h3>Orientation:</h3>
-                              </p>
-                              <p>
-                                <b>Alpha:</b> {orientation?.alpha}
-                              </p>
-                              <p>
-                                <b>Beta:</b> {orientation?.beta}
-                              </p>
-                              <p>
-                                <b>Gamma:</b> {orientation?.gamma}
-                              </p>
-                            </div>
-                          )}
-                        </Grid>
-                      </Grid>
-                    </>
-                  )
-                }}
-              />
-            )
+                      </>
+                    )
+                  }}
+                />
+              )
+            }
           }}
         />
       </TableWrapper>
