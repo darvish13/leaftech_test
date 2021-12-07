@@ -122,3 +122,22 @@ export const TableWrapper = styled.div`
     grid-gap: 1em;
   }
 `
+
+export const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+
+  p {
+    margin: 3em auto;
+    line-height: 1.5em;
+    font-weight: bold;
+    font-size: 0.85em;
+    color: #3087df;
+    text-align: center;
+  }
+`

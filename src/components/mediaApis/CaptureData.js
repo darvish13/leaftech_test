@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { geolocated } from 'react-geolocated'
 import {
   Button,
@@ -13,6 +13,7 @@ import {
   Video,
 } from './captureData_styles'
 import { CaptureButton } from '../../pages/lab/lab_styles'
+import Webcam from 'react-webcam'
 
 const CaptureData = ({
   capturedData,
@@ -63,7 +64,7 @@ const CaptureData = ({
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       // Get available device cameras
       const cameras = await getCameraList()
-
+      console.log({ cameras })
       setCameras(cameras)
 
       // Attach the camera stream to the video tag
@@ -87,8 +88,8 @@ const CaptureData = ({
     await navigator.mediaDevices.getUserMedia({
       video: {
         deviceId: { exact: SelectedCamera || cameras[0].deviceId },
-        width: { exact: 640 },
-        height: { exact: 480 },
+        width: { exact: 600 },
+        height: { exact: 800 },
       },
     })
 
@@ -154,9 +155,7 @@ const CaptureData = ({
         </p>
         <p>
           <b>Alpha: </b>
-          <span>
-            {Number(Alpha || alpha).toFixed(5)}
-          </span>
+          <span>{Number(Alpha || alpha).toFixed(5)}</span>
         </p>
         <p>
           <b>Beta: </b>
@@ -179,12 +178,29 @@ const CaptureData = ({
   }
 
   /**************************************
+   ******** Capture image
+   *************************************/
+  const capture = useCallback(() => {
+    const image = videoRef.current.getScreenshot()
+
+    setCapturedData({
+      image,
+      orientation: {
+        alpha: Number(Alpha).toFixed(5),
+        beta: Number(beta).toFixed(5),
+        gamma: Number(gamma).toFixed(5),
+      },
+      location: coords,
+    })
+  }, [videoRef])
+
+  /**************************************
    ******** Render
    *************************************/
   return (
     <>
       <Main>
-        {!capturedData ? (
+        {!capturedData && Cameras.length > 0 ? (
           <>
             <Video autoPlay ref={videoRef} />
 
@@ -231,6 +247,38 @@ const CaptureData = ({
             )}
 
             <Canvas ref={canvasRef} />
+
+            {/* <Webcam
+              style={{ width: '100vw' }}
+              audio={false}
+              ref={videoRef}
+              screenshotFormat='image/png'
+              videoConstraints={{
+                deviceId: SelectedCamera || Cameras[0].deviceId,
+              }}
+            />
+
+            <CamerasRow>
+              {Cameras.map(({ deviceId, label }, index) => (
+                <CameraBtn
+                  key={deviceId}
+                  onClick={() => setSelectedCamera(deviceId)}
+                  active={
+                    SelectedCamera
+                      ? deviceId === SelectedCamera
+                      : deviceId === Cameras[0].deviceId
+                  }
+                >
+                  Cam {++index}
+                </CameraBtn>
+              ))}
+            </CamerasRow>
+
+            {!Alpha ? (
+              <CaptureBtn onClick={() => setAlpha(alpha)}>Set Alpha</CaptureBtn>
+            ) : (
+              <CaptureBtn onClick={capture}>capture</CaptureBtn>
+            )} */}
           </>
         ) : (
           <>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { NameInput, Relative } from './lab_styles'
+import { NameInput, Relative, LoadingWrapper } from './lab_styles'
 import { useRealmApp } from '../../RealmApp'
 import { useMongoDB } from '../../MongoDB'
-import { Button, Grid, TextField } from '@material-ui/core'
+import { Button, Grid, TextField, CircularProgress } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import CaptureData from '../../components/mediaApis/CaptureData'
 import ImageSeg from '../../modules/imgseg/ImageSeg'
@@ -10,6 +10,7 @@ import DeviceOrientation from 'react-device-orientation'
 import { nanoid } from 'nanoid'
 import { SelectSensorsGroup } from './Components'
 import toast from 'react-hot-toast'
+import axios from 'axios'
 
 const AddSensor = () => {
   /**************************************
@@ -24,7 +25,7 @@ const AddSensor = () => {
    *************************************/
   const [SensorName, setSensorName] = useState()
   const [SensorHasName, setSensorHasName] = useState(false)
-  const [Sending, setSending] = useState(false)
+  const [Sending, setSending] = useState(true)
   const [GoodToGo, setGoodToGo] = useState(false)
   const [CapturedData, setCapturedData] = useState()
   const [GroupName, setGroupName] = useState()
@@ -72,55 +73,25 @@ const AddSensor = () => {
     if (user && db) {
       setSending(true)
 
+      const { image, png } = data
+
+      // **** Get Skyline data from skyline api
+      const { data: skyline } = await axios.post(
+        `${process.env.REACT_APP_SKYLINE_API}/get-skyline`,
+        {
+          image,
+          mask: png,
+        }
+      )
+
       const res = await db.collection('sensors').updateOne(
         { _id: SelectedGroup },
         {
           $push: {
-            sensors: { id: nanoid(), sensor: SensorName, ...data },
+            sensors: { id: nanoid(), sensor: SensorName, ...data, skyline },
           },
         }
       )
-      console.log(res)
-
-      // let updatedData = Sensors.find(({ id }) => id === SelectedGroup)
-
-      // let updatedSensors
-
-      // if (updatedData.sensors.length)
-      //   updatedSensors = [
-      //     ...updatedData.sensors,
-      //     { id: nanoid(), sensor: SensorName, ...data },
-      //   ]
-      // else updatedSensors = [{ id: nanoid(), sensor: SensorName, ...data }]
-
-      // updatedData.sensors = updatedSensors
-
-      // const res = await db
-      //   .collection('sensors')
-      //   .updateOne({ _id: SelectedGroup }, updatedData)
-      // console.log(res)
-
-      // const existingGroup = Sensors.find(({ id }) => id === SelectedGroup.id)
-
-      // let finalData = {}
-
-      // if (existingGroup)
-      //   finalData = {
-      //     ...existingGroup,
-      //     sensors: [
-      //       ...existingGroup.sensors,
-      //       { id: nanoid(), sensor: SensorName, ...data },
-      //     ],
-      //   }
-      // // Mongodb update query
-      // else
-      //   finalData = {
-      //     group: GroupName,
-      //     sensors: [{ id: nanoid(), sensor: SensorName, ...data }],
-      //   }
-
-      // const res = await db.collection('sensors').insertOne(finalData)
-      // console.log(res)
 
       toast.success('Sensor data successfully added')
       history.push('/lab/sensors')
@@ -134,7 +105,18 @@ const AddSensor = () => {
    ******** Render
    *************************************/
   // Loading
-  if (Sending) return <p>Sending data to API ...</p>
+  if (Sending)
+    return (
+      <>
+        <LoadingWrapper>
+          <CircularProgress style={{ color: '#3087df' }} />
+          <p>
+            Adding Sensor Data <br />
+            And Generating Skyline Map
+          </p>
+        </LoadingWrapper>
+      </>
+    )
 
   // Load image segmentor
   if (GoodToGo)
