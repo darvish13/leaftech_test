@@ -25,7 +25,7 @@ const AddSensor = () => {
    *************************************/
   const [SensorName, setSensorName] = useState()
   const [SensorHasName, setSensorHasName] = useState(false)
-  const [Sending, setSending] = useState(true)
+  const [Sending, setSending] = useState(false)
   const [GoodToGo, setGoodToGo] = useState(false)
   const [CapturedData, setCapturedData] = useState()
   const [GroupName, setGroupName] = useState()
