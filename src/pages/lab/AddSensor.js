@@ -11,6 +11,7 @@ import { nanoid } from 'nanoid'
 import { SelectSensorsGroup } from './Components'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import { data as mockData } from '../sandbox/Sandbox'
 
 const AddSensor = () => {
   /**************************************
@@ -71,34 +72,46 @@ const AddSensor = () => {
    *************************************/
   const sendToApi = async data => {
     if (user && db) {
-      setSending(true)
+      try {
+        setSending(true)
 
-      const { image, png } = data
+        const { image, png: mask } = data
+        const skyline = await getSkyline(image, mask)
 
-      // **** Get Skyline data from skyline api
-      const { data: skyline } = await axios.post(
-        `${process.env.REACT_APP_SKYLINE_API}/get-skyline`,
-        {
-          image,
-          mask: png,
-        }
-      )
+        const res = await db.collection('sensors').updateOne(
+          { _id: SelectedGroup },
+          {
+            $push: {
+              sensors: { id: nanoid(), sensor: SensorName, ...data, skyline },
+            },
+          }
+        )
 
-      const res = await db.collection('sensors').updateOne(
-        { _id: SelectedGroup },
-        {
-          $push: {
-            sensors: { id: nanoid(), sensor: SensorName, ...data, skyline },
-          },
-        }
-      )
-
-      toast.success('Sensor data successfully added')
-      history.push('/lab/sensors')
-      setSending(false)
+        toast.success('Sensor data successfully added')
+        history.push('/lab/sensors')
+        setSending(false)
+      } catch (e) {
+        toast.error('Skyline Api Error!!!')
+        console.log(e)
+      }
     } else {
       toast.error('Database Error!!!')
     }
+  }
+
+  /**********************************************
+   ******** Get Skyline data from skyline api
+   **********************************************/
+  const getSkyline = async (image, mask) => {
+    const { data: skyline } = await axios.post(
+      `${process.env.REACT_APP_SKYLINE_API}/get-skyline`,
+      {
+        image,
+        mask,
+      }
+    )
+
+    return skyline
   }
 
   /**************************************

@@ -87,9 +87,9 @@ const CaptureData = ({
   const getStream = async cameras =>
     await navigator.mediaDevices.getUserMedia({
       video: {
-        deviceId: { exact: SelectedCamera || cameras[0].deviceId },
-        width: { exact: 600 },
-        height: { exact: 800 },
+        deviceId: { exact: SelectedCamera || cameras[cameras.length - 1].deviceId },
+        width: { exact: 800 },
+        height: { exact: 600 },
       },
     })
 
@@ -113,7 +113,11 @@ const CaptureData = ({
             <b>Latitude: </b>
             <span>
               {Number(
-                capturedData ? capturedData.location.latitude : coords.latitude
+                capturedData
+                  ? capturedData.location
+                    ? capturedData.location.latitude
+                    : 0
+                  : coords.latitude
               ).toFixed(5)}
             </span>
           </p>
@@ -122,7 +126,9 @@ const CaptureData = ({
             <span>
               {Number(
                 capturedData
-                  ? capturedData.location.longitude
+                  ? capturedData.location
+                    ? capturedData.location.longitude
+                    : 0
                   : coords.longitude
               ).toFixed(5)}
             </span>
@@ -131,7 +137,11 @@ const CaptureData = ({
             <b>Altitude: </b>
             <span>
               {Number(
-                capturedData ? capturedData.location.altitude : coords.altitude
+                capturedData
+                  ? capturedData.location
+                    ? capturedData.location.altitude
+                    : 0
+                  : coords.altitude
               ).toFixed(5)}
             </span>
           </p>
@@ -202,7 +212,7 @@ const CaptureData = ({
       <Main>
         {!capturedData && Cameras.length > 0 ? (
           <>
-            <Video autoPlay ref={videoRef} />
+            {/* <Video autoPlay ref={videoRef} />
 
             <CamerasRow>
               {Cameras.map(({ deviceId, label }, index) => (
@@ -212,7 +222,7 @@ const CaptureData = ({
                   active={
                     SelectedCamera
                       ? deviceId === SelectedCamera
-                      : deviceId === Cameras[0].deviceId
+                      : deviceId === Cameras[Cameras.length - 1].deviceId
                   }
                 >
                   Cam {++index}
@@ -246,15 +256,16 @@ const CaptureData = ({
               </CaptureBtn>
             )}
 
-            <Canvas ref={canvasRef} />
+            <Canvas ref={canvasRef} /> */}
 
-            {/* <Webcam
+            <Webcam
               style={{ width: '100vw' }}
               audio={false}
               ref={videoRef}
-              screenshotFormat='image/png'
+              screenshotFormat='image/jpeg'
               videoConstraints={{
-                deviceId: SelectedCamera || Cameras[0].deviceId,
+                deviceId:
+                  SelectedCamera || Cameras[Cameras.length - 1].deviceId,
               }}
             />
 
@@ -266,7 +277,7 @@ const CaptureData = ({
                   active={
                     SelectedCamera
                       ? deviceId === SelectedCamera
-                      : deviceId === Cameras[0].deviceId
+                      : deviceId === Cameras[Cameras.length - 1].deviceId
                   }
                 >
                   Cam {++index}
@@ -278,7 +289,7 @@ const CaptureData = ({
               <CaptureBtn onClick={() => setAlpha(alpha)}>Set Alpha</CaptureBtn>
             ) : (
               <CaptureBtn onClick={capture}>capture</CaptureBtn>
-            )} */}
+            )}
           </>
         ) : (
           <>

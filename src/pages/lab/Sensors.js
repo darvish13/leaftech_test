@@ -94,16 +94,8 @@ const Sensors = () => {
                   data={innerTableData}
                   title={`${group} Sensors List`}
                   detailPanel={({
-                    sensorData: { image, location, orientation },
+                    sensorData: { image, location, orientation, skyline },
                   }) => {
-                    const {
-                      latitude: lat,
-                      longitude: lng,
-                      altitude: alt,
-                      speed,
-                      heading,
-                    } = location
-
                     return (
                       <>
                         <Grid container spacing={5} style={{ padding: '1em' }}>
@@ -112,25 +104,25 @@ const Sensors = () => {
                           </Grid>
 
                           <Grid item xs={12} sm={12} md={7}>
-                            {Object.keys(location).length > 0 && (
+                            {location && (
                               <div style={{ marginBottom: '3em' }}>
                                 <p>
                                   <h3>Location:</h3>
                                 </p>
                                 <p>
-                                  <b>Lat:</b> {lat}
+                                  <b>Lat:</b> {location?.latitude}
                                 </p>
                                 <p>
-                                  <b>Lng:</b> {lng}
+                                  <b>Lng:</b> {location?.longitude}
                                 </p>
                                 <p>
-                                  <b>Alt:</b> {alt}
+                                  <b>Alt:</b> {location?.altitude}
                                 </p>
                                 <p>
-                                  <b>Speed:</b> {speed}
+                                  <b>Speed:</b> {location?.speed}
                                 </p>
                                 <p>
-                                  <b>Head:</b> {heading}
+                                  <b>Head:</b> {location?.heading}
                                 </p>
                               </div>
                             )}
@@ -152,6 +144,12 @@ const Sensors = () => {
                               </div>
                             )}
                           </Grid>
+
+                          {skyline && (
+                            <Grid item xs={12}>
+                              <img src={skyline} alt='skyline' />
+                            </Grid>
+                          )}
                         </Grid>
                       </>
                     )
