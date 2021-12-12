@@ -82,7 +82,7 @@ export const SelectSensorsGroup = ({
           showSelectAllCheckbox: false,
         }}
         onSelectionChange={selectedRows => {
-          if (selectedRows) setSelectedRow(selectedRows[0].id)
+          if (selectedRows.length) setSelectedRow(selectedRows[0].id)
         }}
       />
 
