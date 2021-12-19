@@ -1,5 +1,7 @@
 import React from 'react'
 import { Switch, Route, NavLink, useLocation } from 'react-router-dom'
+import Footer from '../../components/footer/Footer'
+import Header from '../../components/header/Header'
 import { MaxWidth } from '../../styles/globalStyles'
 import AddSensor from './AddSensor'
 import { Main, Tab, Tabs } from './lab_styles'
@@ -10,6 +12,8 @@ const Lab = () => {
 
   return (
     <>
+      <Header />
+
       <MaxWidth>
         <Main>
           <Tabs>
@@ -33,6 +37,8 @@ const Lab = () => {
           </Switch>
         </Main>
       </MaxWidth>
+
+      <Footer />
     </>
   )
 }
