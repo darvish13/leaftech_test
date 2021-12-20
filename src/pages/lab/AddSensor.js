@@ -110,8 +110,8 @@ const AddSensor = () => {
       {
         image,
         mask,
-        alpha,
-        beta
+        alpha: Number(alpha),
+        beta: Number(beta)
       }
     )
 
