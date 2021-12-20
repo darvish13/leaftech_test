@@ -75,8 +75,10 @@ const AddSensor = () => {
       try {
         setSending(true)
 
-        const { image, png: mask } = data
-        const skyline = await getSkyline(image, mask)
+        const { image, png: mask, orientation: { alpha, beta } } = data
+
+        // Get skyline
+        const skyline = await getSkyline(image, mask, alpha, beta)
 
         const res = await db.collection('sensors').updateOne(
           { _id: SelectedGroup },
