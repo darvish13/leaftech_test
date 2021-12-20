@@ -82,7 +82,7 @@ const AddSensor = () => {
           { _id: SelectedGroup },
           {
             $push: {
-              sensors: { id: nanoid(), sensor: SensorName, ...data, skyline },
+              sensors: { id: nanoid(), sensor: SensorName, ...data, ...skyline },
             },
           }
         )
@@ -103,7 +103,7 @@ const AddSensor = () => {
    ******** Get Skyline data from skyline api
    **********************************************/
   const getSkyline = async (image, mask) => {
-    const { data: skyline } = await axios.post(
+    const { data: { skyline_b64, skyline_dict } } = await axios.post(
       `${process.env.REACT_APP_SKYLINE_API}/get-skyline`,
       {
         image,
@@ -111,7 +111,7 @@ const AddSensor = () => {
       }
     )
 
-    return skyline
+    return { skyline_b64, skyline_dict }
   }
 
   /**************************************
