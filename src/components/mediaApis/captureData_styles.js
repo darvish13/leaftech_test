@@ -87,3 +87,10 @@ export const DebugCard = styled.div`
     margin: 0.5em 0;
   }
 `
+
+export const P = styled.p`
+ font-size: 0.85em;
+ color: gray;
+ line-height: 1.5em;
+ padding: 1em;
+`

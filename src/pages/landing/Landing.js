@@ -11,7 +11,9 @@ const Landing = () => {
 
       <MaxWidth>
         <Main>
-          <Img src='/images/window.webp' alt='' />
+          <Img src='/images/window-sensors.png' alt='' />
+          <P style={{ color: '#0087FF', marginTop: '1em' }}>Functional Alpha Version</P>
+
           <Title>Image Based Sensor Setup</Title>
           <P>Setup virtual sensors directly from your phone!</P>
 

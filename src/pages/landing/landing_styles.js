@@ -40,6 +40,7 @@ export const Button = styled.button`
   padding: 1.5em 5em;
   background-color: #0087FF;
   margin: 3em auto;
+  cursor: pointer;
 
   span {
     font-size: 1.25em;

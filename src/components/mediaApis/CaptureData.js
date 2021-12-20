@@ -10,6 +10,7 @@ import {
   DebugWrapper,
   Image,
   Main,
+  P,
   Video,
 } from './captureData_styles'
 import { CaptureButton } from '../../pages/lab/lab_styles'
@@ -87,7 +88,9 @@ const CaptureData = ({
   const getStream = async cameras =>
     await navigator.mediaDevices.getUserMedia({
       video: {
-        deviceId: { exact: SelectedCamera || cameras[cameras.length - 1].deviceId },
+        deviceId: {
+          exact: SelectedCamera || cameras[cameras.length - 1].deviceId,
+        },
         width: { exact: 800 },
         height: { exact: 600 },
       },
@@ -286,7 +289,28 @@ const CaptureData = ({
             </CamerasRow>
 
             {!Alpha ? (
-              <CaptureBtn onClick={() => setAlpha(alpha)}>Set Alpha</CaptureBtn>
+              <>
+                <P>
+                  Please calibrate your phone compass before setting the alpha.
+                  You can follow the instructions on this
+                  <a
+                    target='_blank'
+                    rel='noreferrer'
+                    href='https://www.youtube.com/watch?v=cCMVQ5hxrRM'
+                    style={{
+                      color: 'blue',
+                      marginLeft: '1em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    video
+                  </a>
+                </P>
+
+                <CaptureBtn onClick={() => setAlpha(alpha)}>
+                  Set Alpha
+                </CaptureBtn>
+              </>
             ) : (
               <CaptureBtn onClick={capture}>capture</CaptureBtn>
             )}
