@@ -479,8 +479,8 @@ const ImageSeg = ({ capturedData, setCapturedData, sendToApi }) => {
           variant='contained'
           style={{ background: '#3087df', color: 'white' }}
           onClick={() => {
-            const png = Annotator.export()
-            const output = { ...capturedData, png }
+            const mask = Annotator.export()
+            const output = { ...capturedData, mask }
 
             setCapturedData(output)
             sendToApi(output)

@@ -94,7 +94,7 @@ const Sensors = () => {
                   data={innerTableData}
                   title={`${group} Sensors List`}
                   detailPanel={({
-                    sensorData: { image, location, orientation, skyline },
+                    sensorData: { image, location, orientation, skyline_b64 },
                   }) => {
                     return (
                       <>
@@ -145,9 +145,9 @@ const Sensors = () => {
                             )}
                           </Grid>
 
-                          {skyline && (
+                          {skyline_b64 && (
                             <Grid item xs={12}>
-                              <img src={skyline} alt='skyline' />
+                              <img src={skyline_b64} alt='skyline' />
                             </Grid>
                           )}
                         </Grid>

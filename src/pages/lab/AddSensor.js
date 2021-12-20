@@ -75,7 +75,7 @@ const AddSensor = () => {
       try {
         setSending(true)
 
-        const { image, png: mask, orientation: { alpha, beta } } = data
+        const { image, mask, orientation: { alpha, beta } } = data
 
         // Get skyline
         const skyline = await getSkyline(image, mask, alpha, beta)
