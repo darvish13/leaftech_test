@@ -174,7 +174,7 @@ const CaptureData = ({
           <b>Beta: </b>
           <span>
             {Number(
-              capturedData?.orientation ? capturedData.orientation.beta : beta
+              capturedData ? capturedData.orientation.beta : beta
             ).toFixed(5)}
           </span>
         </p>
@@ -182,7 +182,7 @@ const CaptureData = ({
           <b>Gamma: </b>
           <span>
             {Number(
-              capturedData?.orientation ? capturedData.orientation.gamma : gamma
+              capturedData ? capturedData.orientation.gamma : gamma
             ).toFixed(5)}
           </span>
         </p>
@@ -322,7 +322,10 @@ const CaptureData = ({
             <CamerasRow>
               <Button
                 color={{ text: 'black', background: '#dedede' }}
-                onClick={() => setCapturedData()}
+                onClick={() => {
+                  setCapturedData()
+                  setAlpha()
+                }}
               >
                 Take Again
               </Button>

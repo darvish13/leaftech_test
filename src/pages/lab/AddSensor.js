@@ -104,12 +104,14 @@ const AddSensor = () => {
   /**********************************************
    ******** Get Skyline data from skyline api
    **********************************************/
-  const getSkyline = async (image, mask) => {
+  const getSkyline = async (image, mask, alpha, beta) => {
     const { data: { skyline_b64, skyline_dict } } = await axios.post(
       `${process.env.REACT_APP_SKYLINE_API}/get-skyline`,
       {
         image,
         mask,
+        alpha,
+        beta
       }
     )
 
