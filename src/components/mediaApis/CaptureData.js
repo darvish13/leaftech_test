@@ -168,22 +168,22 @@ const CaptureData = ({
         </p>
         <p>
           <b>Alpha: </b>
-          <span>{Number(Alpha || alpha).toFixed(5)}</span>
+          <span>{Math.round(Number(Alpha || alpha))}</span>
         </p>
         <p>
           <b>Beta: </b>
           <span>
-            {Number(
+            {Math.round(Number(
               capturedData ? capturedData.orientation.beta : beta
-            ).toFixed(5)}
+            ))}
           </span>
         </p>
         <p>
           <b>Gamma: </b>
           <span>
-            {Number(
+            {Math.round(Number(
               capturedData ? capturedData.orientation.gamma : gamma
-            ).toFixed(5)}
+            ))}
           </span>
         </p>
       </DebugCard>
@@ -193,19 +193,19 @@ const CaptureData = ({
   /**************************************
    ******** Capture image
    *************************************/
-  const capture = useCallback(() => {
+  const capture = () => {
     const image = videoRef.current.getScreenshot()
 
     setCapturedData({
       image,
       orientation: {
-        alpha: Number(Alpha).toFixed(5),
-        beta: Number(beta).toFixed(5),
-        gamma: Number(gamma).toFixed(5),
+        alpha: Math.round(Number(Alpha)),
+        beta: Math.round(Number(beta)),
+        gamma: Math.round(Number(gamma)),
       },
       location: coords,
     })
-  }, [videoRef])
+  }
 
   /**************************************
    ******** Render
